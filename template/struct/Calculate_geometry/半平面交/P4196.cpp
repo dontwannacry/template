@@ -49,7 +49,7 @@ int N,M,K;
 point inp[100010];
 line L[100010];
 struct queue_max{
-    int num[100010],l,r;
+    line num[100010];int l,r;
     // void debug(){        
     //     for(int i = l,j;i <= r;++i){
     //         cout << L[num[i]].O.x << " " << L[num[i]].O.y << ";" << L[num[i]].D.x << " " << L[num[i]].D.y << "\n";
@@ -57,21 +57,21 @@ struct queue_max{
     //     cout << "\n";
     // }
     void clear(){l = 1,r = 0;}
-    void push(int x){num[++r] = x;}
-    void checkout(int x){
-        while(l < r&&check(L[x],L[num[r]],L[num[r-1]])){--r;}
-        while(l < r&&check(L[x],L[num[l]],L[num[l+1]])){++l;}
+    void push(line x){num[++r] = x;}
+    void checkout(line x){
+        while(l < r&&check(x,num[r],num[r-1])){--r;}
+        while(l < r&&check(x,num[l],num[l+1])){++l;}
     }
     void selfcheck(){
-        while(l < r&&check(L[num[l]],L[num[r]],L[num[r-1]])){--r;}
-        while(l < r&&check(L[num[r]],L[num[l]],L[num[l+1]])){++l;}
+        while(l < r&&check(num[l],num[r],num[r-1])){--r;}
+        while(l < r&&check(num[r],num[l],num[l+1])){++l;}
     }
     polygon getpolygon(){
         polygon res;
         // debug();
         for(int i = l,j;i <= r;++i){
             j = i+1;if(j > r){j = l;}
-            res.Plist.push_back(crosspoint(L[num[i]],L[num[j]]));
+            res.Plist.push_back(crosspoint(num[i],num[j]));
             // cout << crosspoint(L[num[i]],L[num[j]]).x << " " << crosspoint(L[num[i]],L[num[j]]).y << "\n";
         }
         return res;
@@ -94,8 +94,8 @@ int main(){
     }
     // cout << "\n";
     for(int i = 1;i <= K;++i){
-        Q.checkout(i);
-        Q.push(i);
+        Q.checkout(L[i]);
+        Q.push(L[i]);
         // Q.debug();
     }
     Q.selfcheck();
